@@ -1,0 +1,2 @@
+-- syntax: sudo mysqldump -u[user] -p[password] -h[hostname] [database] > [filename]
+mysqldump -uroot -hlocalhost learn_db -panggaari > learn_db.sql

@@ -1,0 +1,12 @@
+-- syntax: sudo mysql -u[user] -p[password]
+sudo mysql -uroot -panggaari
+
+SHOW DATABASES;
+
+-- CREATE SCHEMA is a synonym for CREATE DATABASE as of MySQL 5.0.2
+CREATE SCHEMA IF NOT EXISTS learn_db;
+CREATE DATABASE IF NOT EXISTS learn_dbs;
+
+DESC users;
+
+SHOW ENGINES;

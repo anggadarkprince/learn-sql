@@ -1,0 +1,2 @@
+-- syntax: sudo mysql -u[user] -p[password] -h[hostname] [database] < [filename]
+mysql -uroot -panggaari learn_db < learn_db.sql
