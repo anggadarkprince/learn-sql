@@ -10,6 +10,13 @@ INSERT INTO user_logs VALUES
 (NULL, 1, 'Create a post', CURRENT_TIMESTAMP()),
 (NULL, 2, 'Register new user', CURRENT_TIMESTAMP());
 
+-- another example
+INSERT INTO transactions VALUES 
+(NULL, 1, 'Gas station', '', '2018-10-09', 2, 2300, 60000),
+(NULL, 1, 'Lunch and dinner', 'Daily expense', '2018-10-10', 3, 0, 430000)
+(NULL, 2, 'Buy a daily routine', '', CURDATE(), 5, 1000, 500000),
+(NULL, 2, 'Collection', '', CURDATE(), 2, 500, 8500);
+
 -- insert from another table
 INSERT INTO user_contacts(email, phone, address)
 SELECT email, contact, location
