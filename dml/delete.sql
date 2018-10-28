@@ -1,4 +1,5 @@
 -- delete syntax, some SQL MODE will restrict mass deletion (delete without condition)
+-- SET sql_safe_updated=0;
 DELETE FROM users;
 
 -- delete with condition
