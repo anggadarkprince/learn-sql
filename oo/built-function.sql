@@ -67,4 +67,9 @@ SELECT
     ELSE 'world' 
   END AS result; 
 
-SELECT CAST('01' AS INT);
+
+-- CASTING
+SELECT CAST('01' AS UNSIGNED) AS num;
+SELECT CAST('1.2' AS DECIMAL(3,2)) AS num;
+SELECT CAST('1992-05-26' AS CHAR) AS dates;
+SELECT CONCAT('Total: ', CAST(COUNT(*) AS CHAR)) AS total FROM activities;
