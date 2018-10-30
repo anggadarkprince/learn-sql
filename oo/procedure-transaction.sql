@@ -12,6 +12,16 @@ CREATE PROCEDURE withdraw(
 BEGIN
   DECLARE current_balance DECIMAL(10, 2) DEFAULT 0.0;
 
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+  BEGIN
+		SHOW ERRORS;
+  END;
+  
+	DECLARE EXIT HANDLER FOR SQLWARNING
+  BEGIN
+		SHOW WARNINGS;
+  END;
+  
   START TRANSACTION;
   
   -- exclusive lock when we selecting balance
@@ -32,7 +42,7 @@ BEGIN
      SET success = FALSE;
   END IF;
   
-  COMMIT
+  COMMIT;
 END$$
 
 DELIMITER ;
