@@ -1,3 +1,4 @@
+-- create table with ending and set start of auto increment
 CREATE TABLE IF NOT EXISTS users (
 	id INT(11) NOT NULL AUTO_INCREMENT,
   api_token VARCHAR(128) DEFAULT NULL,
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS user_logs (
         ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
+-- create table with cascade delete and update no action constraint
 CREATE TABLE transactions (
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	user_id INT(11) NOT NULL,
@@ -41,3 +43,7 @@ CREATE TABLE transactions (
         REFERENCES users (id)
         ON DELETE CASCADE ON UPDATE NO ACTION
 );
+
+-- create table from selection
+CREATE TABLE user_names AS
+SELECT first_name FROM learn_db.users;

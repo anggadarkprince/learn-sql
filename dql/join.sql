@@ -25,9 +25,9 @@ RIGHT JOIN transactions ON transactions.user_id = users.id;
 SELECT * FROM users CROSS JOIN user_logs;
 
 -- FULL OUTER JOIN does not supported in mysql yet
--- outer join it's combination of left join and right join (or inner join), it's join everything,
+-- outer join is combination of left join and right join (or inner join), it's join everything,
 -- if data in the left hasn't connection in right table then set right data to null
--- if data in the right doesn't match up with left table the set left data to null
+-- if data in the right doesn't match up with left table then set left data to null
 -- we can emulate full outer join with left join and right join combined by union
 
 -- join with table that result of subquery
