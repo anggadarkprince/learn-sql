@@ -13,11 +13,17 @@ SELECT email AS email_address FROM users;
 -- select with subquery
 SELECT first_name, last_name, email, (
 	SELECT message FROM user_logs 
-  WHERE user_logs.user_id = users.id
-  ORDER BY created_at DESC
-  LIMIT 1
+	WHERE user_logs.user_id = users.id
+	ORDER BY created_at DESC
+	LIMIT 1
 ) AS last_log_message
 FROM users;
+
+SELECT * FROM (
+	SELECT CONCAT(name, ' (', username, ')') AS user_identity, email
+	FROM users
+	WHERE last_logged_in IS NOT NULL
+) AS users;
 
 -- select with built in function
 SELECT 

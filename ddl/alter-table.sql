@@ -24,3 +24,11 @@ ADD INDEX log_message_idx (created_at DESC, user_id ASC);
 -- drop index
 ALTER TABLE user_logs 
 DROP INDEX log_message_idx;
+
+-- alter index fulltext
+ALTER TABLE foods
+ADD FULLTEXT ft_food_name (food_name, description);
+
+-- alter index
+ALTER TABLE book
+ADD INDEX idx_book_title (title, price DESC)

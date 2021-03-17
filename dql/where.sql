@@ -36,3 +36,22 @@ SELECT * FROM transactions WHERE title LIKE '%an%'; -- find title any value foll
 
 -- between keyword
 SELECT * FROM transactions WHERE transaction_date BETWEEN '2018-10-15' AND CURDATE();
+
+-- fulltext search
+SELECT * FROM foods
+WHERE MATCH(food_name, description) AGAINST('nasi goreng' IN NATURAL LANGUAGE MODE);
+
+SELECT * FROM foods
+WHERE MATCH(food_name, description) AGAINST('+nasi -goreng' IN BOOLEAN MODE);
+
+SELECT * FROM foods
+WHERE MATCH(food_name, description) AGAINST('sambel* -lele' IN BOOLEAN MODE);
+
+SELECT * FROM foods
+WHERE MATCH(food_name, description) AGAINST('nasi goreng' WITH QUERY EXPANSION);
+
+SELECT * FROM foods
+WHERE MATCH(food_name, description) AGAINST('nasi goreng' IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);
+
+-- see rangking/scoring in fulltext search
+SELECT id, MATCH(food_name,description) AGAINST('nasi' IN NATURAL LANGUAGE MODE) AS score FROM foods;

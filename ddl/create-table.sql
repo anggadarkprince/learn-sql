@@ -1,8 +1,8 @@
 -- create table with ending and set start of auto increment
 CREATE TABLE IF NOT EXISTS users (
 	id INT(11) NOT NULL AUTO_INCREMENT,
-  api_token VARCHAR(128) DEFAULT NULL,
-  first_name VARCHAR(50) NOT NULL,
+	api_token VARCHAR(128) DEFAULT NULL,
+	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) DEFAULT NULL UNIQUE,
 	username VARCHAR(20) NOT NULL UNIQUE,
@@ -32,14 +32,14 @@ CREATE TABLE IF NOT EXISTS user_logs (
 CREATE TABLE transactions (
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	user_id INT(11) NOT NULL,
-  title VARCHAR(150) NOT NULL,
-  category VARCHAR(50) NOT NULL,
+	title VARCHAR(150) NOT NULL,
+	category VARCHAR(50) NOT NULL,
 	description TEXT NOT NULL,
 	transaction_date DATE DEFAULT NULL,
-  total_item INT(11),
-  discount DECIMAL(20,2),
-  total DECIMAL(20,2),
-  CONSTRAINT fk_transaction_user FOREIGN KEY (user_id)
+	total_item INT(11),
+	discount DECIMAL(20,2),
+	total DECIMAL(20,2),
+	CONSTRAINT fk_transaction_user FOREIGN KEY (user_id)
         REFERENCES users (id)
         ON DELETE CASCADE ON UPDATE NO ACTION
 );
@@ -47,3 +47,20 @@ CREATE TABLE transactions (
 -- create table from selection
 CREATE TABLE user_names AS
 SELECT first_name FROM learn_db.users;
+
+-- constraint check only support mysql >= 8.0
+CREATE TABLE IF NOT EXISTS foods (
+	id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	food_name VARCHAR(150) NOT NULL,
+	category VARCHAR(50) NOT NULL CHECK (category IN('MAIN COURSE', 'APPETIZER', 'DESSERT')),
+	description TEXT,
+	image VARCHAR(300),
+	stock INT(11),
+	CONSTRAINT check_stock CHECK (stock >= 0)
+) ENGINE = INNODB;
+
+ALTER TABLE foods
+ADD CHECK (stock >= 1);
+
+DESC foods;
+SHOW CREATE TABLE foods;
