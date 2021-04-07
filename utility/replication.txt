@@ -1,0 +1,87 @@
+# mysql: set replication setting
+/etc/mysql/mysq.cnf
+---------------------------------------------------------------
+[mysqld]
+sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+
+# General replication settings
+gtid_mode = ON
+enforce_gtid_consistency = ON
+master_info_repository = TABLE
+relay_log_info_repository = TABLE
+binlog_checksum = NONE
+log_slave_updates = ON
+log_bin = binlog
+binlog_format = ROW
+transaction_write_set_extraction = XXHASH64
+loose-group_replication_bootstrap_group = OFF
+loose-group_replication_start_on_boot = OFF
+loose-group_replication_ssl_mode = REQUIRED
+loose-group_replication_recovery_use_ssl = 1
+
+# Shared replication group configuration
+loose-group_replication_group_name = "e7802bb4-d6ec-4715-9937-92f2e380d5c8"
+loose-group_replication_ip_whitelist = "83.136.219.131,156.67.214.104,103.157.96.147"
+loose-group_replication_group_seeds = "83.136.219.131:33061,156.67.214.104:33061,103.157.96.147:33061"
+
+# Single or Multi-primary mode? Uncomment these two lines
+# for multi-primary mode, where any host can accept writes
+#loose-group_replication_single_primary_mode = OFF
+#loose-group_replication_enforce_update_everywhere_checks = ON
+
+# Host specific replication configuration
+server_id = 1
+bind-address = "156.67.214.104"
+report_host = "156.67.214.104"
+loose-group_replication_local_address = "156.67.214.104:33061"
+----------------------------------------------------------------
+sudo systemctl restart mysql
+
+# allow replication port
+sudo ufw allow 33061
+sudo ufw allow 3306
+
+# setup replication user and plugins
+mysql -u root -p
+SET SQL_LOG_BIN=0;
+CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+FLUSH PRIVILEGES;
+SET SQL_LOG_BIN=1;
+
+CHANGE MASTER TO MASTER_USER='repl', MASTER_PASSWORD='password' FOR CHANNEL 'group_replication_recovery';
+INSTALL PLUGIN group_replication SONAME 'group_replication.so';
+SHOW PLUGINS;
+
+# mysql: initialize replication
+- from source server do full table backup
+mysqldump -uroot --all-databases --master-data | gzip > dbdump.db.gz
+rsync -avzh -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress ./dbdump.db.gz 103.157.96.147:/home/
+
+- from destination server unzip and restore db
+gunzip dbdump.db.gz
+mysql -uroot < dbdump.db
+# if error: ERROR 1840 (HY000) at line 24: @@GLOBAL.GTID_PURGED can only be set when @@GLOBAL.GTID_EXECUTED is empty.
+# login to mysql and run `RESET MASTER;` to reset gid (proceed with careful)
+
+# bootstrap replication
+- start first node as master
+SET GLOBAL group_replication_bootstrap_group=ON;
+START GROUP_REPLICATION;
+SET GLOBAL group_replication_bootstrap_group=OFF;
+
+- check replication status
+SELECT * FROM performance_schema.replication_group_members;
+SHOW STATUS LIKE '%primary%';
+
+- start another node as slave
+START GROUP_REPLICATION;
+SELECT * FROM performance_schema.replication_group_members;
+SHOW STATUS LIKE '%primary%';
+
+# setup auto-increment replication
+SHOW VARIABLES LIKE '%auto_inc%';
+SET @@GLOBAL.group_replication_auto_increment_increment=2; // depend on total group member
+// if multi-master consider setting bellow
+SET @@GLOBAL.auto_increment_increment=1; // if group replication break and auto increment not reverted
+SET @@GLOBAL.auto_increment_offset=<server-id>;
