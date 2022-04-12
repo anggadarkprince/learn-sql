@@ -17,3 +17,8 @@ GROUP BY user_id, category;
 SELECT COUNT(*) AS total_rows FROM transactions; -- null value will counted because * means all record
 SELECT COUNT(message) AS total_rows FROM transactions; -- null value will not be counted
 SELECT COUNT(DISTINCT user_id, created_at) FROM user_logs GROUP BY user_id;
+
+-- rollup add summary of aggregate function
+SELECT product_name, cateogry, SUM(stock) AS total
+FROM products
+GROUP BY product_name, cateogry WITH ROLLUP;

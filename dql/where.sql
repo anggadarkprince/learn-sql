@@ -37,6 +37,14 @@ SELECT * FROM transactions WHERE title LIKE '%an%'; -- find title any value foll
 -- between keyword
 SELECT * FROM transactions WHERE transaction_date BETWEEN '2018-10-15' AND CURDATE();
 
+-- exists: check is record is available on subquery result
+SELECT code, customer_name
+FROM customers
+WHERE [NOT] EXISTS(
+	SELECT * FROM orders
+    WHERE orders.customer_id = customers.id
+);
+
 -- fulltext search
 SELECT * FROM foods
 WHERE MATCH(food_name, description) AGAINST('nasi goreng' IN NATURAL LANGUAGE MODE);

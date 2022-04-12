@@ -22,8 +22,9 @@ CREATE TABLE IF NOT EXISTS user_logs (
     user_id INT(11) NOT NULL,
     message TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX fk_log_user_idx (user_id ASC),
-    CONSTRAINT fk_log_user FOREIGN KEY (user_id)
+    INDEX fk_log_user_idx (user_id ASC), -- add index
+	FULLTEXT (message), -- add fulltext index
+    CONSTRAINT fk_log_user FOREIGN KEY (user_id) -- add foreign key
         REFERENCES users (id)
         ON DELETE CASCADE ON UPDATE RESTRICT
 );

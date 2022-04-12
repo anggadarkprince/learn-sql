@@ -88,11 +88,12 @@ COMMIT;
 
 
 
+-- https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html
 -- SELECT FOR UPDATE
 START TRANSACTION;
 SET @withdraw = 500;
 SET @account_id = 1;
-SELECT balance FROM accounts WHERE id = @account_id FOR UPDATE; -- (WRITE LOCK) with same query in other sessions will wait until this released by commit or rollback (even though the update is not performed)
+SELECT balance FROM accounts WHERE id = @account_id FOR UPDATE; -- (WRITE LOCK) with same query in other sessions will wait until this released by commit or rollback, but regular select is allowed (even though the update is not performed)
 -- check that the balance is bigger than the withdraw amount
 UPDATE accounts SET balance = balance - @withdraw WHERE id = @account_id;
 COMMIT;
