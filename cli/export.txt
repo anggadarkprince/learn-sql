@@ -1,2 +1,11 @@
 -- syntax: sudo mysqldump -u[user] -p[password] -h[hostname] [database] > [filename]
 mysqldump -uroot -hlocalhost learn_db -panggaari > learn_db.sql
+
+# dump --databases option (add create and use database syntax)
+mysqldump -u[user] -p[password] -h 192.168.1.88 --compress --databases [dbname] --result-file=E:\backup.sql
+
+# dump single database
+mysqldump test > dump.sql
+
+# dump single database and specific tables
+mysqldump test t1 t3 t7 > dump.sql

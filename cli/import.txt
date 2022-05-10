@@ -1,2 +1,11 @@
 -- syntax: sudo mysql -u[user] -p[password] -h[hostname] [database] < [filename]
 mysql -uroot -panggaari learn_db < learn_db.sql
+
+# reload single database (without create database syntax)
+./mysql.exe [dbname] < dump.sql
+
+# reload from file that created by mysqldump with the --all-databases or --databases option (create database included)
+./mysql.exe < e:\\backup.sql
+
+# import and set variable on the fly
+mysql -uroot --init-command="SET SESSION FOREIGN_KEY_CHECKS=0;SET SQL_MODE='ALLOW_INVALID_DATES';" wh_temp2 < warehouse.sql
