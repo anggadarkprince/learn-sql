@@ -1,0 +1,24 @@
+# ip: 157.245.196.139
+# host: database1
+
+-- setup user replication first same as binary-;pg-position-based (0)
+
+## Set read-only (optional to make consistency)
+mysql> SET @@GLOBAL.read_only = ON;
+
+$> mysqladmin -uroot -p shutdown
+
+## Setting the source configuration
+mysql> SET GLOBAL server_id = 1;
+mysql> SET GLOBAL gtid_mode = ON;
+mysql> SET GLOBAL enforce-gtid-consistency = ON;
+
+-- move steps to server-replica (1)
+-- continue steps from server-replica (2)
+
+$> service mysql start
+
+-- move steps to server-replica (3)
+-- continue steps from server-replica (4)
+
+mysql> SET @@GLOBAL.read_only = OFF;
