@@ -49,6 +49,9 @@ CREATE TABLE transactions (
 CREATE TABLE user_names AS
 SELECT first_name FROM learn_db.users;
 
+-- copy table structure from another table
+CREATE TABLE members2 LIKE members;
+
 -- constraint check only support mysql >= 8.0
 CREATE TABLE IF NOT EXISTS foods (
 	id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

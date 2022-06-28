@@ -38,3 +38,11 @@ SELECT first_name, "" AS remark FROM users;
 -- operand and concat column
 SELECT title, (total - discount) AS total_transaction FROM transactions;
 SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users;
+
+
+-- CTE: common table expression - mysql 8.0
+WITH regular_users AS (
+    SELECT * FROM users WHERE STATUS = 'ACTIVATED'
+)
+SELECT email, NAME FROM regular_users
+WHERE user_type = 'INTERNAL'

@@ -64,6 +64,11 @@ mysql -uroot < dbdump.db
 # if error: ERROR 1840 (HY000) at line 24: @@GLOBAL.GTID_PURGED can only be set when @@GLOBAL.GTID_EXECUTED is empty.
 # login to mysql and run `RESET MASTER;` to reset gid (proceed with careful)
 
+# mysql: check and disable super readonly
+SELECT @@global.read_only, @@global.super_read_only;
+SET GLOBAL super_read_only = OFF;
+SET GLOBAL READ_ONLY = OFF;
+
 # bootstrap replication
 - start first node as master
 SET GLOBAL group_replication_bootstrap_group=ON;

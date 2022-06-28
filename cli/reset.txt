@@ -1,0 +1,14 @@
+# stop mysql server
+systemctl stop mysqld
+
+# restart mysql without password
+mysqld --skip-grant-tables --user=mysql &
+
+# login without password
+mysql -uroot
+
+# load privileges table
+FLUSH PRIVILEGES
+
+# change root password
+ALTER USER `root`@`localhost` IDENTIFIED BY `mypassword`

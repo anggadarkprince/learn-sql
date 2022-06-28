@@ -21,10 +21,24 @@ INSERT INTO transactions VALUES
 INSERT INTO user_contacts(email, phone, address)
 SELECT email, contact, location
 FROM users
-WHERE id = 1
+WHERE id = 1;
 
 -- insert and skip the row that produce error
 INSERT IGNORE INTO users(email, password)
 VALUES('user1@email.com', 'secret'),
-      ('user1@email.com', 'secret'), -- should be error becuase email is unique but will skip instead and complete the rest of inserts
+      ('user1@email.com', 'secret'), -- should be error because email is unique but will skip instead and complete the rest of inserts
       ('user2@email.com', 'secret');
+
+-- insert by passing function (JSON type)
+INSERT INTO products(name, category, attributes)
+VALUES('Television', 'Digital',
+  JSON_OBJECT(
+      "network", JSON_ARRAY("GSM" , "CDMA" , "HSPA" , "EVDO") ,
+      "body", "5.11 x 2.59 x 0.46 inches" ,
+      "weight", "143 grams" ,
+      "sim", "Micro-SIM" ,
+      "display", "4.5 inches" ,
+      "resolution", "720 x 1280 pixels" ,
+      "os", "Android Jellybean v4.3"
+  )
+);

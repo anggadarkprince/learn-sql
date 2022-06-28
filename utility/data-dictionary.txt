@@ -1,0 +1,19 @@
+select table_name, table_schema, table_rows from tables where table_schema='rt'
+
+systemctl edit --full mysqld
+ExecStart=/usr/sbin/mysqld-debug --daemonize --pid-file=/var/run/mysqld/mysqld.pid $MYSQLD_OPTS
+systemctl restart mysqld
+
+mysql > SET SESSION debug='+d,skip_dd_table_access_check';
+
+SELECT tables1.name, mysql.tablespaces.name
+FROM
+(  SELECT * FROM mysql.tables WHERE schema_id
+   IN (SELECT id FROM mysql.schemata WHERE name='mysql')
+) AS tables1
+LEFT JOIN
+  mysql.tablespaces ON tables1.tablespace_id = tablespaces.id
+WHERE tables1.name NOT IN ('ndb_binlog_index')
+ORDER BY tables1.name;
+
+SELECT table_name, table_schema, table_rows FROM TABLES WHERE table_schema='annga_ari_v1'
