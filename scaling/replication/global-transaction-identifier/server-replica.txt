@@ -20,10 +20,10 @@ or in my.cnf file to survive when mysql shutdown/restart:
 server-id=2
 gtid_mode=ON
 enforce-gtid-consistency=ON
-# manual start replica, when mysql server start
-skip_replica_start=OFF
+skip_replica_start=OFF -- manual start replica, when mysql server start
 
-$> service mysql start
+-- prevent replica to write binlog that received from source, enable if this replica also as source other replicas
+$> service mysql start --log-replica-updates=OFF
 
 -- move steps to server-source (2)
 -- continue steps from server-source (3)

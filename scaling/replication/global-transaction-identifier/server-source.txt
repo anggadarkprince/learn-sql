@@ -1,7 +1,10 @@
 # ip: 157.245.196.139
 # host: database1
 
--- setup user replication first same as binary-;pg-position-based (0)
+-- setup user replication first same as binary-log-position-based (0)
+mysql> CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL; -- use SSL
+mysql> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+mysql> ALTER USER 'repl'@'%' REQUIRE SSL; -- alter existing user to use SSL
 
 ## Set read-only (optional to make consistency)
 mysql> SET @@GLOBAL.read_only = ON;

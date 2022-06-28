@@ -23,11 +23,12 @@ or in my.cnf file to survive when mysql shutdown/restart:
 $> service mysql start
 
 mysql> CHANGE REPLICATION SOURCE TO
-    ->     SOURCE_HOST='157.245.196.139',
+    ->     SOURCE_HOST='157.245.52.72',
     ->     SOURCE_PORT = 3306,
     ->     SOURCE_USER='repl',
     ->     SOURCE_PASSWORD='password',
-    ->     SOURCE_AUTO_POSITION=1;
+    ->     SOURCE_AUTO_POSITION=1,
+    ->     SOURCE_SSL=1; -- enable SSL
 
 mysql> START REPLICA;
 

@@ -8,14 +8,17 @@ mysql> SET GLOBAL server_id = 1;
 -- continue steps from server-replica (2)
 
 ## Creating user for replication: mysql_native_password
+mysql> SET sql_log_bin = 0; -- exclude account management statement to binlog (optional)
 mysql> CREATE USER 'repl'@'%' IDENTIFIED BY 'password';
 mysql> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+mysql> SET sql_log_bin = 1;
 
 ### Using caching_sha2_password
 mysql> CREATE USER 'repl'@'%' IDENTIFIED BY 'password' REQUIRE SSL;
 
-### Change user to use mysql_native_password
+### Change user to use mysql_native_password or necessary access
 mysql> ALTER USER root IDENTIFIED WITH mysql_native_password BY 'password';
+mysql> RENAME USER 'root'@'localhost' TO 'root'@'%';
 
 
 
