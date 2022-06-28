@@ -30,3 +30,17 @@ mysql> CHANGE REPLICATION SOURCE TO
     ->     SOURCE_AUTO_POSITION=1;
 
 mysql> START REPLICA;
+
+## REPLICATION RULES (FILTER REPLICA)
+-- should stop replica sql thread
+mysql> STOP REPLICA SQL_THREAD FOR CHANNEL '';
+mysql> CHANGE REPLICATION FILTER
+    ->      REPLICATE_DO_DB = (ecommerce, purchasing);
+    ->      REPLICATE_IGNORE_DB = (system_logs, sandbox);
+    ->      REPLICATE_DO_TABLE = (ecommerce.users, ecommerce.products, purchasing.vendors);
+    ->      REPLICATE_IGNORE_TABLE = (ecommerce.logs, purchasing.logs);
+    ->      REPLICATE_WILD_DO_TABLE = (wild_tbl_list);
+    ->      REPLICATE_WILD_IGNORE_TABLE = (wild_tbl_list);
+    ->      REPLICATE_REWRITE_DB = ((ecommerce, e_commerce_v1));
+    ->      FOR CHANNEL '';
+mysql> START REPLICA SQL_THREAD FOR CHANNEL '';

@@ -13,6 +13,18 @@ mysql> SET GLOBAL server_id = 1;
 mysql> SET GLOBAL gtid_mode = ON;
 mysql> SET GLOBAL enforce-gtid-consistency = ON;
 
+## Filter database or table write to bin log (optional, can be filtered on replica)
+mysql> SET GLOBAL binlog_do_db = warehouse;
+
+[mysqld]
+binlog_do_db=ecommerce
+binlog_do_db=warehouse
+binlog_ignore_db=sandbox
+binlog_do_table=ecommerce.products
+binlog_ignore_table=warehouse.logs
+
+$> service mysql start --binlog-do-db=ecommerce --binlog-ignore-db=sandbox
+
 -- move steps to server-replica (1)
 -- continue steps from server-replica (2)
 
