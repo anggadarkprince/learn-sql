@@ -36,4 +36,6 @@ $> service mysql start
 -- move steps to server-replica (3)
 -- continue steps from server-replica (4)
 
+## remove read only state
 mysql> SET @@GLOBAL.read_only = OFF;
+mysql> SET @@GLOBAL.super_read_only = OFF;

@@ -31,3 +31,8 @@ mysql> SET GLOBAL sql_replica_skip_counter = N
 mysql> SELECT * FROM performance_schema.replication_applier_status_by_worker;
 mysql> CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION=0, SOURCE_LOG_FILE='binlog.000145', SOURCE_LOG_POS=235;
 mysql> CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION=1;
+
+
+## Error when restore data from source to replica
+-- if error @@GLOBAL.GTID_PURGED or Parameters MASTER_LOG_FILE, MASTER_LOG_POS, RELAY_LOG_FILE and RELAY_LOG_POS cannot be set when MASTER_AUTO_POSITION is active.
+-- then in replica: mysql> reset replica; reset master; CHANGE MASTER TO master_auto_position=0;

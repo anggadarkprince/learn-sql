@@ -15,3 +15,9 @@ SHOW GRANTS FOR  ari@localhost;
 
 -- drop user
 DROP USER 'ari'@'localhost';
+
+-- alter user, change password or host
+ALTER USER root IDENTIFIED WITH mysql_native_password BY 'password';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+RENAME USER 'root'@'localhost' TO 'root'@'%';
+FLUSH PRIVILEGES;

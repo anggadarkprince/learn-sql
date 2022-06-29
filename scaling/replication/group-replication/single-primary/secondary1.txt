@@ -1,0 +1,32 @@
+# ip: 157.245.52.72
+# host: database2
+
+## Group replication setup
+[mysqld]
+disabled_storage_engines="MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
+
+-- Replication configuration parameters
+server_id=2
+gtid_mode=ON
+enforce_gtid_consistency=ON
+binlog_checksum=NONE           # Not needed from 8.0.21
+
+-- Group replication configuration
+plugin_load_add='group_replication.so'
+group_replication_group_name="2106a166-f75e-11ec-9e42-4ab7d5a7ef11"
+group_replication_start_on_boot=off
+group_replication_local_address= "157.245.52.72:33061"
+group_replication_group_seeds= "157.245.196.139:33061,157.245.52.72:33061,167.99.81.228:33061"
+group_replication_bootstrap_group= off
+
+bind-address = "157.245.52.72"
+report_host = "157.245.52.72"
+
+## Create user credentials
+-- if create user in binlog excluded
+
+## User user for use with distributed recovery
+mysql> CHANGE REPLICATION SOURCE TO SOURCE_USER='rpl_user', SOURCE_PASSWORD='password' FOR CHANNEL 'group_replication_recovery';
+
+## Join the group
+mysql> START GROUP_REPLICATION;
