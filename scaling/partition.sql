@@ -2,7 +2,7 @@
 -- so that the queries access only a fraction of the data;
 -- thus there is less for them to scan, balancing the workload and potentially making queries faster.
 
--- partitioning while create new table: RANGE, LIST, HASH, KEY
+## Partitioning while create new table: RANGE, LIST, HASH, KEY
 
 -- partition by range, insert data will error if value is not meet in the range
 CREATE TABLE members (id INT, first_name VARCHAR(50), hired DATE)
@@ -32,21 +32,65 @@ CREATE TABLE members (id INT, first_name VARCHAR(50), hired DATE)
     PARTITION BY KEY (id)
         PARTITIONS 4;
 
--- create partition on existing table
-ALTER TABLE members PARTITION BY RANGE(YEAR(hired)) (
-    PARTITION p0 VALUES LESS THAN (2020),
-    PARTITION p1 VALUES LESS THAN MAXVALUE
-);
+
+## Sub partition
+-- also known as composite partitioning—is the further division of each partition in a partitioned table.
+-- Table ts has 3 RANGE partitions. Each of these partitions—p0, p1, and p2—is further divided into 2 subpartitions.
+-- In effect, the entire table is divided into 3 * 2 = 6 partitions.
+CREATE TABLE ts(id INT, purchased DATE)
+    PARTITION BY RANGE (YEAR(purchased))
+        SUBPARTITION BY HASH (TO_DAYS(purchased))
+        SUBPARTITIONS 2 (
+            PARTITION p0 VALUES LESS THAN (1990),
+            PARTITION p1 VALUES LESS THAN (2000),
+            PARTITION p2 VALUES LESS THAN MAXVALUE
+        );
+
+-- more specific sub partition
+CREATE TABLE ts (id INT, purchased DATE)
+    PARTITION BY RANGE( YEAR(purchased) )
+        SUBPARTITION BY HASH( TO_DAYS(purchased) ) (
+        PARTITION p0 VALUES LESS THAN (1990) (
+            SUBPARTITION s0,
+            SUBPARTITION s1
+        ),
+        PARTITION p1 VALUES LESS THAN (2000) (
+            SUBPARTITION s2,
+            SUBPARTITION s3
+        ),
+        PARTITION p2 VALUES LESS THAN MAXVALUE (
+            SUBPARTITION s4,
+            SUBPARTITION s5
+        )
+    );
+
+
+## Query partition
 
 -- select data by partition
 SELECT * FROM members;
-SELECT * FROM members PARTITION (p0); -- use partition name
+SELECT * FROM members PARTITION (p0,p1); -- use partition name
 SELECT * FROM members PARTITION (east_south_region); -- use partition name
 
 -- show all partition of table or schema
 SELECT table_schema, table_name, partition_name, table_rows, partition_expression, partition_method
 FROM information_schema.partitions
 WHERE table_name = 'members';
+
+-- update specific partition
+UPDATE members PARTITION (p0) SET first_name = 'Angga' WHERE YEAR(hired) = 2022 ;
+
+-- delete specific partition
+DELETE FROM members PARTITION (p0, p1) WHERE first_name LIKE 'a%';
+
+
+## Modify partition table
+
+-- create partition on existing table
+ALTER TABLE members PARTITION BY RANGE(YEAR(hired)) (
+    PARTITION p0 VALUES LESS THAN (2020),
+    PARTITION p1 VALUES LESS THAN MAXVALUE
+    );
 
 -- delete the rows of a partition without affecting the rest of the dataset in the table
 ALTER TABLE members TRUNCATE PARTITION p0;
@@ -81,3 +125,9 @@ ALTER TABLE members REMOVE PARTITIONING;
 -- switch data inside partition (members) to other non partitioned table (members2), vice-versa: proceed with careful,
 -- the next execution will move data from `members2` into `member` table again
 ALTER TABLE members EXCHANGE PARTITION p0 WITH TABLE members2;
+
+
+## Check partition table
+
+SELECT table_name, partition_name, table_rows, avg_row_length, data_length
+FROM information_schema.partitions;
