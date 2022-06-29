@@ -53,9 +53,12 @@ mysql> SET GLOBAL group_replication_bootstrap_group=ON;
 mysql> START GROUP_REPLICATION; -- mysql> START GROUP_REPLICATION USER='rpl_user', PASSWORD='password';
 mysql> SET GLOBAL group_replication_bootstrap_group=OFF;
 
-## Check group state
+## Check group state & monitoring
 mysql> SELECT * FROM performance_schema.replication_group_members;
 mysql> SHOW STATUS LIKE 'group_replication_primary_member';
+mysql> SELECT * FROM performance_schema.replication_group_member_stats
+mysql> SELECT * FROM performance_schema.replication_connection_status;
+mysql> SELECT * FROM performance_schema.replication_applier_status;
 
 -- add some tests
 mysql> CREATE DATABASE test;
@@ -65,3 +68,33 @@ mysql> INSERT INTO users VALUES (1, 'Angga Ari Wijaya');
 
 mysql> SHOW BINLOG EVENTS;
 mysql> SELECT @@global.gtid_executed;
+
+
+## Administration function
+-- change primary
+mysql> SELECT group_replication_set_as_primary(member_uuid);
+
+-- change mode single - multi primary
+mysql> SELECT group_replication_switch_to_single_primary_mode();
+mysql> SELECT group_replication_switch_to_single_primary_mode(member_uuid);
+
+-- stop replication
+mysql> STOP GROUP_REPLICATION;
+
+## Restart a group
+-- Consider all member are leave the group, then which member should be started if multi-primary
+-- Find the biggest gtid on all servers
+mysql> SELECT @@GLOBAL.GTID_EXECUTED;
+mysql> SELECT received_transaction_set FROM \
+               performance_schema.replication_connection_status WHERE \
+               channel_name="group_replication_applier";
+
+-- Then bootstrap from that server
+mysql> SET GLOBAL group_replication_bootstrap_group=ON;
+mysql> START GROUP_REPLICATION;
+mysql> SET GLOBAL group_replication_bootstrap_group=OFF;
+mysql> SELECT * FROM performance_schema.replication_group_members;
+
+-- On each members
+mysql> START GROUP_REPLICATION;
+mysql> SELECT * FROM performance_schema.replication_group_members;
