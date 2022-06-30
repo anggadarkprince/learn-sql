@@ -20,4 +20,5 @@ DROP USER 'ari'@'localhost';
 ALTER USER root IDENTIFIED WITH mysql_native_password BY 'password';
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 RENAME USER 'root'@'localhost' TO 'root'@'%';
+UPDATE mysql.user SET PLUGIN = 'mysql_native_password' WHERE user = 'mysql_innodb_cluster_1';
 FLUSH PRIVILEGES;
