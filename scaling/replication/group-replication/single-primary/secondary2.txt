@@ -17,6 +17,7 @@ group_replication_group_name="2106a166-f75e-11ec-9e42-4ab7d5a7ef11"
 group_replication_start_on_boot=off
 group_replication_local_address= "167.99.81.228:33061"
 group_replication_group_seeds= "157.245.196.139:33061,157.245.52.72:33061,167.99.81.228:33061"
+group_replication_ip_whitelist = "157.245.196.139,157.245.52.72,167.99.81.228"
 group_replication_bootstrap_group= off
 
 bind-address = "167.99.81.228"

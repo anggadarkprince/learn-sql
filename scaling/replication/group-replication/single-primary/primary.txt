@@ -30,6 +30,7 @@ group_replication_group_name="2106a166-f75e-11ec-9e42-4ab7d5a7ef11"
 group_replication_start_on_boot=off  -- instructs the plugin to not start operations automatically when the server starts
 group_replication_local_address= "157.245.196.139:33061"  -- sets the network address and port which the member uses for internal communication with other members in the group.
 group_replication_group_seeds= "157.245.196.139:33061,157.245.52.72:33061,167.99.81.228:33061" -- sets the hostname and port of the group members which are used by the new member to establish its connection to the group.
+group_replication_ip_whitelist = "157.245.196.139,157.245.52.72,167.99.81.228"
 group_replication_bootstrap_group=off  --  instructs the plugin whether to bootstrap the group or not.
 
 bind-address = "157.245.196.139"
