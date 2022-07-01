@@ -22,3 +22,7 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password
 RENAME USER 'root'@'localhost' TO 'root'@'%';
 UPDATE mysql.user SET PLUGIN = 'mysql_native_password' WHERE user = 'mysql_innodb_cluster_1';
 FLUSH PRIVILEGES;
+
+-- set default password plugins via mysql config file
+-- [mysqld]
+-- default-authentication-plugin=mysql_native_password

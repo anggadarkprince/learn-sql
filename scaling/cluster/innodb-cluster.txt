@@ -46,13 +46,14 @@ mysql-js> dba.configureInstance("root@206.189.35.68:3306");
 
 ## Create new cluster
 -- after configure instances, from any server / instance run mysql shell, for example start from server 1
-mysql-js> var cluster = dba.createCluster("myCluster");  -- auto add server 1 to cluster
-mysql-js> cluster.addInstance("root@157.245.52.72:3306"); -- add server 2
+mysql-js> var cluster = dba.createCluster("myCluster");  -- auto add server 1 to cluster, when create cluster fail due to replication configuration, set config manually then repeat
+mysql-js> cluster.addInstance("root@157.245.52.72:3306"); -- add server 2 -- when gtid empty or not match select to Clone the data
 mysql-js> cluster.addInstance("root@206.189.35.68:3306"); -- add server 3
 mysql-js> cluster.status(); -- show status of cluster status
 
 
 ## Bootstrap MySql Router
+-- router can live outside the cluster, same server of the client app is recommended, and bootstrap any node of cluster
 $> mysqlrouter --bootstrap root@localhost:3310 --directory /tmp/myrouter --conf-use-sockets --account routerfriend --account-create always
 
 Output:
