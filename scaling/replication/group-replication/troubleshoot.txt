@@ -24,14 +24,14 @@ Solution:
 - ERROR 3546 (HY000) at line 26: @@GLOBAL.GTID_PURGED cannot be changed: the added gtid set must not overlap with @@GLOBAL.GTID_EXECUTED
 
 Solution:
--- Reset replica: reset master;
+-- Reset replica: mysql> reset master;
 
 
 ## Restore backup on replica error (2)
 - ERROR 1776 (HY000) at line 35: Parameters MASTER_LOG_FILE, MASTER_LOG_POS, RELAY_LOG_FILE and RELAY_LOG_POS cannot be set when MASTER_AUTO_POSITION is active.
 
 Solution:
--- Reset replica: stop replica; reset replica all;
+-- Reset replica: mysql> stop replica; reset replica all;
 
 
 ## Invalid credential
