@@ -57,4 +57,7 @@ These are some sample steps to achieve that:
 4. Beyond the point-in-time recovery that has been finished, if you also want to reexecute all the statements after 
    your point-in-time of interest, use `mysqlbinlog` again to apply all the events after, we can leave `--stop-position`
    because we want to restore all data until last binlog file\
-   `$> mysqlbinlog --start-position=355 /var/lib/mysql/bin.00006 | mysql -u root -p`
+   `$> mysqlbinlog --start-position=355 /var/lib/mysql/bin.00006 | mysql -u root -p`\
+   We also can execute multiple binlog `mysqlbinlog --start-position=355 binlog.00006 binlog.00007 binlog.00008 | mysql -u root -p`
+5. More detail information about using mysqldump + mysqlbinlog for Backup and Restore:
+   https://dev.mysql.com/doc/refman/8.0/en/mysqlbinlog-backup.html#mysqlbinlog-backup-example
