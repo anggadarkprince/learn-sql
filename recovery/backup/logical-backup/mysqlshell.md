@@ -10,6 +10,7 @@ https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-utilities-dump-instance
 - `$> mysqlsh`
 - `shell-py> shell.connect("root@localhost")`
 - `shell-py> util.dump_instance("/home/backup")`
+- `shell-py> util.dump_instance("/var/lib/mysql-files")`
 
 ### Dump schemas
 - `shell-py> util.dump_schemas(["sandbox_db", "test_db"], "/home/backup")`

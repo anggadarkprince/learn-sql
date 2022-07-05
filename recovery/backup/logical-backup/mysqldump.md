@@ -43,7 +43,17 @@ Wil export 2 files, sql table structure and text-based data of the table.\
 Used to dump a replication source server to produce a dump file that can be used to set up 
 another server as a replica of the source.
 - `$> mysqldump --all-databases --source-data > dbdump.sql`
-- `$> mysqldump --all-databases --source-data | gzip > dbdump.db.gz`
+- `$> mysqldump --all-databases --source-data=2 > dbdump.sql`
+If the option value is 2, the `CHANGE REPLICATION SOURCE TO` statement is written as an SQL comment, 
+it has no effect when the dump file is reloaded, but usefull when start replication or point-in-time recovery.
+The output will contain something like:\
+`-- Position to start replication or point-in-time recovery from`\
+`-- CHANGE MASTER TO MASTER_LOG_FILE='binlog.000006', MASTER_LOG_POS=1173349;`
+
+### Compress dump output
+- `$> mysqldump --all-databases --source-data=2 | gzip > dbdump.db.gz`
+
+### Delete binary logs after backup
 - Delete the binary logs by sending a `PURGE BINARY LOGS` statement to the server after performing the dump operation,
 The options automatically enable `--source-data`. Deleting the MySQL binary logs with `mysqldump --delete-master-logs` 
 can be dangerous if your server is a replication source server, because replicas might not yet fully have processed 
