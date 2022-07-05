@@ -33,14 +33,14 @@ binlog_ignore_table=warehouse.logs
 `$> service mysql start --binlog-do-db=ecommerce --binlog-ignore-db=sandbox`
 
 >-- move steps to server-replica (1)\
-> ...
+> ...\
 >-- continue steps from server-replica (2)
 
 ## Start the source server
 `$> service mysql start`
 
 >-- move steps to server-replica (3)\
-> ...
+> ...\
 >-- continue steps from server-replica (4)
 
 ### Remove read only state

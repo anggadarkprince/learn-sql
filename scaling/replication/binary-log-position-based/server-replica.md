@@ -14,7 +14,8 @@ or in `my.cnf` file to survive when mysql shutdown/restart:
 server-id=2
 ```
 
-> -- move steps to server-source (2)
+> -- move steps to server-source (2)\
+> ...\
 > -- continue steps from server-source (3)
 
 ### Restoring source snapshot
